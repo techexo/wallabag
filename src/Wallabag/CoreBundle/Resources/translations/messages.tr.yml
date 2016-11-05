@@ -38,6 +38,7 @@ menu:
         search: 'Ara'
         filter_entries: 'Filtrele'
         export: 'Dışa Aktar'
+        # sort_entries: 'Sort entries'
     search_form:
         input_label: 'Aramak istediğiniz herhangi bir şey yazın'
 
@@ -206,6 +207,15 @@ entry:
         action:
             clear: 'Temizle'
             filter: 'Filtrele'
+    sort:
+        # title: 'Sort options'
+        # status_label: 'Sort by'
+        # by:
+        #    creation_date: 'Creation date'
+        #    title: 'Title'
+        #    last_updated: 'Last updated'
+        #ascending: 'Asencending'
+        # descending: 'Descending'
     view:
         left_menu:
             # back_to_top: 'Back to top'
