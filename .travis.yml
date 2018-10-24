@@ -1,17 +1,17 @@
 language: php
 
 services:
-  - rabbitmq
-  - redis
+    - rabbitmq
+    - redis
 
 # faster builds on docker-container setup
 sudo: false
 
 # used for HHVM
 addons:
-  apt:
-    packages:
-      - tidy
+    apt:
+        packages:
+            - tidy
 
 # cache vendor dirs
 cache:
@@ -24,8 +24,6 @@ cache:
         - $HOME/.yarn-cache
 
 php:
-    - 5.6
-    - 7.0
     - 7.1
     - 7.2
     - nightly
@@ -41,7 +39,7 @@ env:
 matrix:
     fast_finish: true
     include:
-        - php: 7.0
+        - php: 7.2
           env: CS_FIXER=run VALIDATE_TRANSLATION_FILE=run ASSETS=build DB=sqlite
     allow_failures:
         - php: nightly
@@ -68,14 +66,13 @@ before_install:
     - if [[ $TRAVIS_REPO_SLUG = wallabag/wallabag ]]; then cp .composer-auth.json ~/.composer/auth.json; fi;
 
 script:
-    - travis_wait bash composer install -o  --no-interaction --no-progress --prefer-dist
+    - travis_wait bash composer install -o --no-interaction --no-progress --prefer-dist
+
     - echo "travis_fold:start:prepare"
     - make prepare DB=$DB
     - echo "travis_fold:end:prepare"
 
-    - echo "travis_fold:start:fixtures"
-    - php bin/console doctrine:fixtures:load --no-interaction --env=test
-    - echo "travis_fold:end:fixtures"
+    - make fixtures
 
     - if [[ $VALIDATE_TRANSLATION_FILE = '' ]]; then ./bin/simple-phpunit -v ; fi;
     - if [[ $CS_FIXER = run ]]; then php bin/php-cs-fixer fix --verbose --dry-run ; fi;
