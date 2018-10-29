@@ -365,6 +365,3 @@ jms_serializer:
 sensio_framework_extra:
    router:
         annotations: false
-
-craue_config:
-    entity_name: Wallabag\CoreBundle\Entity\InternalSetting
