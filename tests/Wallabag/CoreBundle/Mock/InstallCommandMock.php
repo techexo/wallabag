@@ -17,6 +17,9 @@ class InstallCommandMock extends InstallCommand
 {
     protected function runCommand($command, $parameters = [])
     {
+        // echo $command."\n";
+        var_dump($command);
+
         return $this;
     }
 }
