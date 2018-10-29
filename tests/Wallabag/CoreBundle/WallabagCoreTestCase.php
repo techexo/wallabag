@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\NullOutput;
 use Wallabag\CoreBundle\Entity\Config;
 use Wallabag\UserBundle\Entity\User;
@@ -40,24 +41,42 @@ abstract class WallabagCoreTestCase extends WebTestCase
         $application = new Application($client->getKernel());
         $application->setAutoExit(false);
 
-        $application->run(new ArrayInput([
+        $output = new BufferedOutput();
+        $exitCode = $application->run(new ArrayInput([
             'command' => 'doctrine:schema:drop',
             '--no-interaction' => true,
             '--force' => true,
             '--env' => 'test',
-        ]), new NullOutput());
+        ]), $output);
 
-        $application->run(new ArrayInput([
+        if (0 !== $exitCode) {
+            var_dump('doctrine:schema:drop');
+            var_export($output->fetch()); die();
+        }
+
+        $output = new BufferedOutput();
+        $exitCode = $application->run(new ArrayInput([
             'command' => 'doctrine:schema:create',
             '--no-interaction' => true,
             '--env' => 'test',
-        ]), new NullOutput());
+        ]), $output);
 
-        $application->run(new ArrayInput([
+        if (0 !== $exitCode) {
+            var_dump('doctrine:schema:create');
+            var_export($output->fetch()); die();
+        }
+
+        $output = new BufferedOutput();
+        $exitCode = $application->run(new ArrayInput([
             'command' => 'doctrine:fixtures:load',
             '--no-interaction' => true,
             '--env' => 'test',
-        ]), new NullOutput());
+        ]), $output);
+
+        if (0 !== $exitCode) {
+            var_dump('doctrine:fixtures:load');
+            var_export($output->fetch()); die();
+        }
 
         /*
          * Recreate client to avoid error:
